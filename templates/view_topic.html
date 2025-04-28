@@ -1,0 +1,129 @@
+<!-- templates/view_topic.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ topic.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .topic-container {
+            padding: 20px;
+        }
+        .topic-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        .topic-content {
+            white-space: pre-wrap;
+        }
+        .back-link {
+            margin-top: 20px;
+        }
+        /* Стили для постов */
+        .posts-container {
+            margin-top: 40px;
+        }
+        .post-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .post-author {
+            font-weight: bold;
+            color: #333;
+        }
+        .post-date {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .create-post-container {
+            margin-top: 40px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .create-post-container h2 {
+            margin-top: 0;
+        }
+        .create-post-container textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            resize: vertical;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .create-post-container button {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .create-post-container button:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <div class="topic-container">
+        <h1>{{ topic.title }}</h1>
+        <div class="topic-meta">
+            Раздел: {{ section.name }} | Автор: {{ user.username }} | Дата: {{ topic.created_at.strftime('%Y-%m-%d %H:%M') }}
+        </div>
+        <div class="topic-content">
+            {{ topic.content }}
+        </div>
+        <!-- Контейнер с постами -->
+    <div class="posts-container">
+        <h2>Посты</h2>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post-item">
+                    <div class="post-header">
+                        <span class="post-author">{{ post.user_id }}</span> <!-- Здесь лучше отобразить username -->
+                        <span class="post-date">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                    <div class="post-content">
+                        {{ post.content }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Нет постов в этом топике.</p>
+        {% endif %}
+    </div>
+
+        <div class="back-link">
+            <a href="{{ url_for('forum_bp.forum_home', section_id=section.id) }}">&#8592; Назад к разделу</a>
+        </div>
+    </div>
+
+    <!-- Контейнер с формой создания поста -->
+    <div class="create-post-container">
+        <h2>Добавить новый пост</h2>
+        <form method="POST" action="{{ url_for('forum_bp.create_post', topic_id=topic.id) }}">
+            <textarea name="content" placeholder="Введите ваш пост здесь..." required></textarea>
+            <button type="submit">Добавить пост</button>
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!-- templates/publications.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Публикации</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <div class="main-container">
+    <!-- Левая колонка (список типов файлов) -->
+    <div class="files-left">
+      <h2>Типы файлов</h2>
+      <ul>
+        {% for ftype, cnt in file_types %}
+          <li>{{ ftype }} ({{ cnt }})</li>
+        {% endfor %}
+      </ul>
+
+      {% if user and user.role == 'admin' %}
+        <button onclick="openAddPublicationModal()">Добавить</button>
+      {% endif %}
+    </div>
+
+    <!-- Правая колонка (поиск + список публикаций) -->
+    <div class="files-right">
+      <form method="GET" action="{{ url_for('publications_bp.publications_home') }}">
+        <input type="text" name="search" value="{{ search_term }}" placeholder="Поиск по названию">
+        <button type="submit">Поиск</button>
+      </form>
+
+      <div class="file-list">
+        {% for pub in publications %}
+          <div class="file-item">
+            <h3>{{ pub.title }}</h3>
+            <p>Тип: {{ pub.file_type }}</p>
+            <p>{{ pub.content }}</p>
+            {% if pub.file_path %}
+              <a href="{{ url_for('publications_bp.uploaded_file', filename=pub.file_path.split('/')[-1]) }}" download>Скачать</a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно создания публикации (только для admin) -->
+  <div class="modal" id="addPublicationModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeAddPublicationModal()">&times;</span>
+      <h2>Добавить новую публикацию</h2>
+      <form method="POST" action="{{ url_for('publications_bp.add_publication') }}" enctype="multipart/form-data">
+        <label>Заголовок</label>
+        <input type="text" name="title" required>
+
+        <label>Описание</label>
+        <textarea name="content" required></textarea>
+
+        <label>Файл</label>
+        <input type="file" name="file" accept="*/*"> <!-- Принимаем любые типы файлов -->
+
+        <button type="submit">Добавить</button>
+      </form>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script>
+    function openAddPublicationModal() {
+      document.getElementById('addPublicationModal').style.display = 'block';
+    }
+    function closeAddPublicationModal() {
+      document.getElementById('addPublicationModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

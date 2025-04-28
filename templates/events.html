@@ -1,0 +1,313 @@
+<!-- templates/events.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Мероприятия - {{ month }}/{{ year }}</title>
+  <!-- Подключаем основной CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    /* Стили для основного контейнера */
+    .main-container {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Левая колонка (список мероприятий) */
+    .container-left {
+      flex: 3;
+    }
+
+    /* Правая колонка (календарь) - уменьшен размер */
+    .container-right {
+      flex: 1;
+    }
+
+    /* Стили для мероприятий */
+    .event-item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .event-date {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .event-description {
+      margin-bottom: 10px;
+    }
+
+    .event-item a {
+      text-decoration: none;
+      color: #2196F3;
+      font-weight: bold;
+    }
+
+    /* Стили для календаря */
+    .calendar {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      overflow: hidden;
+      font-size: 0.8em;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f2f2f2;
+      padding: 8px;
+    }
+
+    .calendar-header h2 {
+      margin: 0;
+      font-size: 1em;
+    }
+
+    .calendar-navigation a {
+      text-decoration: none;
+      color: #2196F3;
+      font-weight: bold;
+      margin: 0 5px;
+      font-size: 0.9em;
+    }
+
+    .calendar-weekdays {
+      display: flex;
+      background-color: #f9f9f9;
+      padding: 5px 0;
+      font-size: 0.85em;
+    }
+
+    .calendar-weekdays div {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .calendar-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calendar-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0;
+    }
+
+    .calendar-day {
+      flex: 1;
+      margin: 1px;
+      box-sizing: border-box;
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 5px;
+      border-radius: 4px;
+      position: relative;
+      min-height: 60px;
+      background-color: #fff;
+      cursor: pointer;
+      font-size: 0.75em;
+    }
+
+    .calendar-day.other-month {
+      background-color: #f0f0f0;
+      color: #aaa;
+    }
+
+    .calendar-day.today {
+      background-color: #ffeb3b;
+    }
+
+    /* Новые стили для дней с событиями */
+    .calendar-day.has-event {
+      background-color: #cce5ff; /* Светло-голубой */
+      border-color: #2196F3;    /* Синий */
+    }
+
+    /* Удалены стили для .calendar-day .event */
+
+    /* Стили для модального окна */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right:0;
+      bottom:0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      width: 500px;
+      max-width: 90%;
+      position: relative;
+    }
+
+    .modal-content .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    /* Дополнительные стили */
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .navigation-buttons a {
+      text-decoration: none;
+      color: #2196F3;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  {% include 'header.html' %}
+
+  <div class="main-container">
+    <!-- Левая колонка (список мероприятий) -->
+    <div class="container-left">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Список мероприятий - {{ month }}/{{ year }}</h1>
+        {% if user and user.role == 'admin' %}
+          <button onclick="openCreateEventModal()">Создать мероприятие</button>
+        {% endif %}
+      </div>
+
+      <!-- Список мероприятий -->
+      {% for event in events %}
+        <div class="event-item">
+          <div class="event-header">
+            <h2>{{ event.title }}</h2>
+            <!-- Справа дата проведения -->
+            <span class="event-date">
+              {{ event.start_date.strftime('%d.%m.%Y %H:%M') }}
+              {% if event.end_date %}
+                - {{ event.end_date.strftime('%d.%m.%Y %H:%M') }}
+              {% endif %}
+            </span>
+          </div>
+          <!-- Описание события -->
+          <p class="event-description">{{ event.description }}</p>
+
+          <!-- Ссылка "Обсудить", ведущая на топик в форуме (пример URL) -->
+          {% if event.topic_id %}
+            <a href="{{ url_for('forum_bp.view_topic', topic_id=event.topic_id) }}">
+              Обсудить
+            </a>
+          {% else %}
+            <p>Нет ссылки на топик</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Правая колонка (календарь) -->
+    <div class="container-right">
+      <div class="calendar">
+        <div class="calendar-header">
+          <h2>{{ month_name_ru }} {{ year }}</h2>
+          <div class="calendar-navigation">
+            <a href="{{ url_for('events_bp.events_home', year=prev_year, month=prev_month) }}">&laquo; Предыдущий</a>
+            <a href="{{ url_for('events_bp.events_home', year=next_year, month=next_month) }}">Следующий &raquo;</a>
+          </div>
+        </div>
+        <div class="calendar-weekdays">
+          {% for day in ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] %}
+            <div>{{ day }}</div>
+          {% endfor %}
+        </div>
+        <div class="calendar-body">
+          {% for week in calendar_data %}
+            <div class="calendar-row">
+              {% for day in week %}
+                <div class="calendar-day
+                            {% if not day.is_current_month %} other-month{% endif %}
+                            {% if day.date == today %} today{% endif %}
+                            {% if day.has_event %} has-event{% endif %}"
+                     title="{% if day.has_event %}{{ day.event_info | join(', ') }}{% endif %}">
+                  <div class="day-number">{{ day.number }}</div>
+                  <!-- Удалено отображение событий под датой -->
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно создания события (только для admin) -->
+  <div class="modal" id="createEventModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeCreateEventModal()">&times;</span>
+
+      <h2>Создать новое мероприятие</h2>
+      <form method="POST" action="{{ url_for('events_bp.create_event') }}">
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="description">Описание</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="start_date">Дата и время начала</label>
+        <input type="datetime-local" id="start_date" name="start_date" required>
+
+        <label for="end_date">Дата и время окончания</label>
+        <input type="datetime-local" id="end_date" name="end_date" required>
+
+        <button type="submit">Создать</button>
+      </form>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+  <script>
+    function openCreateEventModal() {
+      document.getElementById('createEventModal').style.display = 'block';
+    }
+    function closeCreateEventModal() {
+      document.getElementById('createEventModal').style.display = 'none';
+    }
+
+    // Закрытие модального окна при клике вне его
+    window.onclick = function(event) {
+      var modal = document.getElementById('createEventModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

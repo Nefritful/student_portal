@@ -1,0 +1,64 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Главная</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <h1>Студенческий портал</h1>
+
+  <div class="main-container">
+    <!-- Левая колонка (70%) -->
+    <div class="left-column">
+      <!-- Последние Мероприятия -->
+      <div class="block">
+        <h2>Последние Мероприятия</h2>
+        <ul>
+          {% for e in events %}
+            <li>
+              {{ e.title }}
+              <!-- Можно добавить ссылку, дату, описание и т.д. -->
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Последние обсуждения -->
+      <div class="block">
+        <h2>Последние обсуждения</h2>
+        <ul>
+          {% for t in topics %}
+            <li>
+              {{ t.title }}
+              <!-- Можно добавить ссылку на топик, сокращённое описание и т.п. -->
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Правая колонка (30%) -->
+    <div class="right-column">
+      <div class="block">
+        <h2>Публикации</h2>
+        <ul>
+          {% for p in publications %}
+            <li>
+              {{ p.title }}
+              <!-- При необходимости можно добавить описание, дату, ссылку и т.д. -->
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

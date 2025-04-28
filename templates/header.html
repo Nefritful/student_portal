@@ -1,0 +1,59 @@
+<!-- templates/header.html -->
+{% if user_logged_in %}
+<nav>
+    <div class="nav-left">
+        <a href="{{ url_for('index_bp.index') }}">Главная</a>
+        <a href="{{ url_for('events_bp.events_home') }}">Мероприятия</a>
+        <a href="{{ url_for('publications_bp.publications_home') }}">Публикации</a>
+        <a href="{{ url_for('forum_bp.forum_home') }}">Форум</a>
+    </div>
+    <div class="nav-right">
+        <a href="{{ url_for('profile_bp.profile_home') }}">Личный кабинет</a>
+        <a href="{{ url_for('auth_bp.logout') }}">Выйти</a>
+    </div>
+</nav>
+{% else %}
+<nav>
+    <div class="nav-left">
+        <a href="{{ url_for('index_bp.index') }}">Главная</a>
+    </div>
+    <div class="nav-right">
+        <a href="#" onclick="openModal()">Войти</a>
+    </div>
+</nav>
+{% endif %}
+
+<!-- Модальное окно для входа/регистрации (скрыто по умолчанию) -->
+<div class="modal" id="loginModal" style="display: none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+
+    <!-- Форма входа -->
+    <div id="loginForm">
+      <h2>Вход</h2>
+      <form method="POST" action="{{ url_for('auth_bp.login') }}">
+        <label>Email</label>
+        <input type="email" name="email" required>
+        <label>Пароль</label>
+        <input type="password" name="password" required>
+        <button type="submit">Войти</button>
+      </form>
+      <p><a href="#" onclick="showRegister()">Регистрация</a></p>
+    </div>
+
+    <!-- Форма регистрации (скрыта по умолчанию) -->
+    <div id="registerForm" style="display: none;">
+      <button onclick="showLogin()"><- Вернуться</button>
+      <h2>Регистрация</h2>
+      <form method="POST" action="{{ url_for('auth_bp.register') }}">
+        <label>Имя пользователя</label>
+        <input type="text" name="username" required>
+        <label>Email</label>
+        <input type="email" name="email" required>
+        <label>Пароль</label>
+        <input type="password" name="password" required>
+        <button type="submit">Зарегистрироваться</button>
+      </form>
+    </div>
+  </div>
+</div>

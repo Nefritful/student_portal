@@ -1,0 +1,597 @@
+/* static/css/styles.css */
+
+/* Сброс отступов и базовые настройки */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Шапка (header / nav) */
+nav {
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.nav-left a,
+.nav-right a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+/* Модальное окно */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #FFF;
+  margin: 10% auto;
+  padding: 20px;
+  width: 300px;
+  position: relative;
+  border-radius: 4px;
+}
+
+.close {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#loginForm, #registerForm {
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+  cursor: pointer;
+}
+/* Пример: общий контейнер для двух колонок */
+.main-container {
+  display: flex;
+  margin: 20px;
+  gap: 20px;
+}
+
+/* Левая колонка: 80% */
+.container-left {
+  width: 80%;
+}
+
+/* Правая колонка: 20% */
+.container-right {
+  width: 20%;
+}
+
+/* Стили для списка событий */
+.event-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-header h2 {
+  margin: 0;
+}
+
+.event-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Календарь */
+.calendar {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+/* Каждая "неделя" — горизонтальный ряд */
+.calendar-row {
+  display: flex;
+}
+
+/* Каждый "день" — ячейка */
+.calendar-day {
+  flex: 1 0 14%; /* примерно 7 дней на строку, но можно подгонять под дизайн */
+  text-align: center;
+  margin: 2px;
+  padding: 5px 0;
+  cursor: pointer;
+  position: relative; /* для всплывающей подсказки */
+  border-radius: 4px;
+}
+
+/* Если в этот день есть событие — подсвечиваем */
+.calendar-day.has-event {
+  background-color: #add8e6; /* светло-синий */
+}
+
+/* Всплывающая подсказка при наведении */
+.calendar-day.has-event:hover::after {
+  content: attr(data-event-title) " (" attr(data-event-date) ")";
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 999;
+  font-size: 0.8rem;
+}
+/* Отдельные стили для страницы публикаций */
+.main-container {
+  display: flex;
+  gap: 20px;
+  margin: 20px;
+}
+
+/* Левая колонка (типы файлов) */
+.files-left {
+  width: 20%;
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Правая колонка (поиск + список файлов) */
+.files-right {
+  width: 80%;
+}
+
+/* Список типов файлов */
+.files-left ul {
+  list-style: none;
+  padding-left: 0;
+}
+.files-left li {
+  margin: 5px 0;
+}
+
+/* Отдельные элементы файлов */
+.file-list {
+  margin-top: 20px;
+}
+.file-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+}
+
+.file-item h3 {
+  margin: 0 0 5px 0;
+}
+.forum-container {
+  display: flex;
+  margin: 20px;
+  gap: 20px;
+}
+
+/* Левая колонка (разделы) */
+.forum-sections {
+  width: 20%;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+/* Правая колонка (топики) */
+.forum-topics {
+  width: 80%;
+}
+
+/* Стили для каждого топика */
+.topic-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+}
+
+/* Нижняя строка внутри топика */
+.topic-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.discuss-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.topic-meta {
+  color: #666;
+  font-size: 0.9em;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  margin: 20px;
+}
+
+.main-container {
+  display: flex;
+  margin: 20px;
+  gap: 20px;
+}
+
+/* Левая колонка (70%) */
+.left-column {
+  width: 70%;
+}
+
+/* Правая колонка (30%) */
+.right-column {
+  width: 30%;
+}
+
+.block {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.block h2 {
+  margin-top: 0;
+}
+/* -------- Общий стиль для страницы -------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f7f9fc; /* очень светлый оттенок для фона */
+  color: #333;
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+  color: #1c3d5a; /* насыщенный синий */
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Параграфы и списки */
+p {
+  margin: 0.5em 0;
+  line-height: 1.4;
+}
+ul, ol {
+  margin: 0.5em 0 0.5em 1.5em; /* отступ списка */
+}
+
+/* Ссылки */
+a {
+  color: #1c7ed6;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* -------- Контейнеры и блоки -------- */
+.main-container {
+  display: flex;
+  margin: 20px;
+  gap: 20px;
+}
+
+.container-left, .left-column {
+  width: 70%;
+}
+
+.container-right, .right-column {
+  width: 30%;
+}
+
+/* Например, блоки для карточек, событий, и т.д. */
+.block, .event-item, .topic-item, .file-item {
+  background-color: #ffffff; /* белый фон */
+  border: 1px solid #dae0e6; /* светлая граница */
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.block h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* -------- Шапка (header / nav) -------- */
+nav {
+  background-color: #e9f0f7;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left a,
+.nav-right a {
+  margin-right: 10px;
+  color: #1c3d5a;
+}
+.nav-left a:last-child,
+.nav-right a:last-child {
+  margin-right: 0;
+}
+
+/* -------- Формы -------- */
+label {
+  display: inline-block;
+  margin: 0.5em 0 0.2em;
+  color: #1c3d5a;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="datetime-local"],
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 1em;
+  border: 1px solid #c8d0da;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 0.95rem;
+  color: #333;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="datetime-local"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #1c7ed6;
+  outline: none;
+}
+
+/* Кнопки */
+button {
+  background-color: #1c7ed6;
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #1862a5;
+}
+
+/* -------- Модальные окна -------- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5); /* полупрозрачный фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Кнопка «закрыть» внутри модалки */
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #999;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+}
+.modal-content .close:hover {
+  color: #666;
+}
+
+/* -------- Календарь -------- */
+.calendar {
+  border: 1px solid #dae0e6;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
+.calendar-row {
+  display: flex;
+}
+.calendar-day {
+  flex: 1 0 14%;
+  text-align: center;
+  margin: 2px;
+  padding: 8px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+.calendar-day:hover {
+  background-color: #f1f5f9;
+}
+.has-event {
+  background-color: #dbeeff;
+}
+
+/* Всплывающая подсказка при наведении */
+.calendar-day.has-event:hover::after {
+  content: attr(data-event-title) " (" attr(data-event-date) ")";
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1c3d5a;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 999;
+  font-size: 0.8rem;
+}
+
+/* -------- Футер -------- */
+footer {
+  background-color: #e9f0f7;
+  color: #1c3d5a;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: 20px;
+}
+.container-right {
+  width: 20%;
+  box-sizing: border-box; /* Чтобы правильно считать проценты */
+}
+
+/* Календарь занимать 100% родителя, без дополнительного overflow */
+.calendar {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.calendar-row {
+  display: flex;
+  justify-content: space-between; /* или space-around, если хотите */
+  margin: 0;
+}
+
+.calendar-day {
+  flex: 1 0 13.5%; /* вместо 14%, чтобы учесть зазоры */
+  margin: 1px;     /* очень маленький margin */
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+}
+/* static/css/styles.css */
+
+/* Стили для разделов */
+.forum-sections ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.forum-sections li {
+    margin: 5px 0;
+}
+
+.forum-sections a {
+    text-decoration: none;
+    color: #333;
+}
+
+.forum-sections a:hover {
+    text-decoration: underline;
+}
+
+/* Активный раздел */
+.active-section a {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+/* Стили для топиков */
+.forum-topics .topic-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.forum-topics .topic-item h3 {
+    margin-top: 0;
+}
+
+.topic-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topic-meta {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Стили для модального окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom:0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    width: 500px;
+    max-width: 90%;
+}
+
+.modal-content .close {
+    float: right;
+    font-size: 1.5em;
+    cursor: pointer;
+}

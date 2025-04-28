@@ -1,0 +1,178 @@
+<!-- templates/forum.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Форум</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    /* Добавим простой стиль для активного раздела */
+    .active-section {
+        font-weight: bold;
+        color: #2196F3;
+    }
+    /* Дополнительные стили для разделов и топиков */
+    .forum-container {
+        display: flex;
+        padding: 20px;
+    }
+    .forum-sections {
+        width: 25%;
+        margin-right: 20px;
+    }
+    .forum-sections ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .forum-sections li {
+        margin: 5px 0;
+    }
+    .forum-sections a {
+        text-decoration: none;
+        color: #333;
+    }
+    .forum-sections a:hover {
+        text-decoration: underline;
+    }
+    .forum-topics {
+        width: 75%;
+    }
+    .forum-topics .topic-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+    .forum-topics .topic-item h3 {
+        margin-top: 0;
+    }
+    .topic-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .topic-meta {
+        font-size: 0.9em;
+        color: #666;
+    }
+    /* Стили для модального окна */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right:0;
+        bottom:0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 4px;
+        width: 500px;
+        max-width: 90%;
+    }
+    .modal-content .close {
+        float: right;
+        font-size: 1.5em;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <div class="forum-container">
+    <!-- Левая колонка - разделы -->
+    <div class="forum-sections">
+      <h2>Разделы</h2>
+      <ul>
+        <li {% if not selected_section %}class="active-section"{% endif %}>
+          <a href="{{ url_for('forum_bp.forum_home') }}">Все разделы</a>
+        </li>
+        {% for section in sections %}
+          <li {% if selected_section and section.id == selected_section.id %}class="active-section"{% endif %}>
+            <a href="{{ url_for('forum_bp.forum_home', section_id=section.id) }}">{{ section.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Правая колонка - топики -->
+    <div class="forum-topics">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="display: inline-block;">Топики</h2>
+        {% if user_logged_in %}
+          <button onclick="openCreateTopicModal()">Создать топик</button>
+        {% endif %}
+      </div>
+
+      {% if selected_section %}
+        <h3>Раздел: {{ selected_section.name }}</h3>
+      {% endif %}
+
+      {% if not topics %}
+        <p>Нет топиков для отображения.</p>
+      {% else %}
+        {% for topic in topics %}
+          <div class="topic-item">
+            <h3>{{ topic.title }}</h3>
+            {% set truncated = topic.content[:500] %}
+            {% if topic.content|length > 500 %}
+              {% set truncated = truncated + '...' %}
+            {% endif %}
+            <p>{{ truncated }}</p>
+            <div class="topic-footer">
+              <a href="{{ url_for('forum_bp.view_topic', topic_id=topic.id) }}">Обсудить</a>
+              <div class="topic-meta">
+                Дата: {{ topic.created_at.strftime('%Y-%m-%d %H:%M') }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Модальное окно "Создать топик" -->
+  <div class="modal" id="createTopicModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeCreateTopicModal()">&times;</span>
+      <h2>Новый топик</h2>
+      <form method="POST" action="{{ url_for('forum_bp.create_topic') }}">
+        <label>Заголовок</label>
+        <input type="text" name="title" required>
+
+        <label>Содержимое</label>
+        <textarea name="content" required></textarea>
+
+        <!-- Раздел выбора -->
+        <label>Раздел</label>
+        <select name="section_id" required>
+          <option value="" disabled selected>Выберите раздел</option>
+          {% for section in sections %}
+            <option value="{{ section.id }}">{{ section.name }}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit">Создать</button>
+      </form>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+  <script>
+    function openCreateTopicModal() {
+      document.getElementById('createTopicModal').style.display = 'block';
+    }
+    function closeCreateTopicModal() {
+      document.getElementById('createTopicModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
